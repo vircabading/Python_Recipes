@@ -1,10 +1,10 @@
 # ////////////////////////////////////////////////////////
-# USERS CONTROLLER
+# LOGIN CONTROLLER
 # ////////////////////////////////////////////////////////
 
 from flask_app import app
 from flask import render_template, session, redirect, request
-from flask_app.models import login_model
+from flask_app.models import login_model, recipes_model
 
 # //// SHOW /////////////////////////////////////
 
@@ -89,22 +89,6 @@ def registration():
 #     return render_template("user_show.html", user = user, all_users = all_users)
 
 # //// RETRIEVE ////////////////////////////////////
-
-@app.route('/dashboard')                                                    # DASHBOARD
-def Dashboard():
-    print("******** in dashboard *******************")
-    if not 'lu_id' in session:                                              # Check if user is logged in
-        print("User is not logged in, redirect to root login")
-        return redirect("/")                                                # If not logged in, redirect to root login
-    data = {
-        'id': session['lu_id']
-    }
-    print("data:")
-    print(data)
-    user = login_model.LoginUsers.get_one(data)                             # Retrive user's info from db and make a user instance
-    print("User:")
-    print(user)
-    return render_template("dashboard.html", user=user)                     # Pass user's info to the Dashboard
 
 # @app.route('/users/')
 # @app.route('/users')                                                    # Read All Users Page

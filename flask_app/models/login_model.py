@@ -6,7 +6,7 @@ from flask_app import app                                               # import
 from flask_bcrypt import Bcrypt                                         # we are creating an object called bcrypt, 
 bcrypt = Bcrypt(app)                                                    #   which is made by invoking the function Bcrypt with our app as an argument 
 
-TARGETDATABASE = 'login_user_db'                                       # Designates the database we are using
+TARGETDATABASE = 'recipes_db'                                       # Designates the database we are using
 TABLENAME = "users"                                                     # Designates the table we are using
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')      # Pattern for email validatiom
 
@@ -20,6 +20,7 @@ class LoginUsers:
         self.password = data['password']
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
+        self.recipes = [];
 
     # //// FLASH ///////////////////////////////////////////////////////////
 
@@ -126,6 +127,28 @@ class LoginUsers:
         results = connectToMySQL(TARGETDATABASE).query_db(query, data)  # Call the connectToMySQL function with the target db
                                                                         # result is a list of a single dictionary
         return cls(results[0])                                          # return an instance of the dictionary
+
+    # **** JOIN ACION ******************************************************
+    # **** Get All Users with its Recipes ********************************
+    # @returns: an instance of the dojo
+    @classmethod
+    def get_dojo_with_ninjas (cls, data:dict):
+        query = "SELECT * FROM dojos LEFT JOIN ninjas ON dojos.id = ninjas.dojo_id WHERE dojos.id = %(id)s;"
+        results = connectToMySQL(TARGETDATABASE).query_db(query, data)  # Call the connectToMySQL function with the target db
+                                                                        # results is a list of dictionaries
+        dojo = cls(results[0])                                          # get an instance of this dojo
+        for row_from_db in results:                                     # loop through all the list of dictionaries
+            ninja_data = {                                              # use the dictionaries we are loopimg through to build a data structure
+                "id": row_from_db["ninjas.id"],
+                "first_name": row_from_db["first_name"],
+                "last_name": row_from_db["last_name"],
+                "age": row_from_db["age"],
+                "created_at": row_from_db["ninjas.created_at"],
+                "updated_at": row_from_db["ninjas.updated_at"]
+            }
+            dojo.ninjas.append( ninjas_model.Ninjas(ninja_data))        # get an instance of a ninja and append it
+                                                                        #   to the list of ninjas in this dojo instance
+        return dojo
 
     # **** Get One by Email Class Method **********************************
     # @Returns: an instance of the class

@@ -1,21 +1,22 @@
 # ////////////////////////////////////////////////////////
-# USERS CONTROLLER
+# RECIPESCONTROLLER
 # ////////////////////////////////////////////////////////
 
 from flask_app import app
 from flask import render_template, session, redirect, request
-import flask_app
-from flask_app.models import users_model
+from flask_app.models import login_model, recipes_model
 
 # //// SHOW /////////////////////////////////////
 
-# @app.route('/')                                                         # Main Page
-# def root():
-#     print("******** in index *******************")
-#     return render_template("index.html")
+
+
+# //// FORM POST /////////////////////////////////
+
 
 
 # //// CREATE ////////////////////////////////////
+
+
 
 # @app.route('/post', methods=['POST'])                         # Retrieve the input values from create form
 # def post():
@@ -43,6 +44,23 @@ from flask_app.models import users_model
 #     return render_template("user_show.html", user = user, all_users = all_users)
 
 # //// RETRIEVE ////////////////////////////////////
+
+@app.route('/dashboard')                                                    # DASHBOARD
+def Dashboard():
+    print("******** in dashboard *******************")
+    if not 'lu_id' in session:                                              # Check if user is logged in
+        print("User is not logged in, redirect to root login")
+        return redirect("/")                                                # If not logged in, redirect to root login
+    data = {
+        'id': session['lu_id']
+    }
+    print("data:")
+    print(data)
+    user = login_model.LoginUsers.get_one(data)                             # Retrive user's info from db and make a user instance
+    print("User:")
+    print(user)
+    all_recipes = recipes_model.Recipes.get_all()
+    return render_template("dashboard.html", user=user, all_recipes = all_recipes )                     # Pass user's info to the Dashboard
 
 # @app.route('/users/')
 # @app.route('/users')                                                    # Read All Users Page
@@ -85,10 +103,3 @@ from flask_app.models import users_model
 #     users_model.Users.delete(data)
 #     return redirect('/users')
 
-# //// 404 CATCH //////////////////////////////////
-
-# **** Ensure that if the user types in any route other than the ones specified, 
-#           they receive an error message saying "Sorry! No response. Try again ****
-@app.errorhandler(404) 
-def invalid_route(e): 
-    return "Sorry! No response. Try again."

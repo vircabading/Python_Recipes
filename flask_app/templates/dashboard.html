@@ -13,8 +13,8 @@
   <header>
     <div class="navbar navbar-dark bg-dark box-shadow">
       <div class="container d-flex justify-content-between">
-        <a href="" class="navbar-brand d-flex align-items-center">
-            <strong class="text-warning">LogIn and Registration</strong>
+        <a href="/dashboard" class="navbar-brand d-flex align-items-center">
+            <strong class="text-warning">Recipes</strong>
         </a>
         <div class="right-nav-bar">
             <a href="/logout" class="btn btn-danger">LogOut</a>
@@ -27,21 +27,49 @@
   <!-- //// MAIN AREA //////// -->
   <main role="main">
     <div class="container mt-4">
-      <div class="row">
+      <div class="d-flex justify-content-between align-items-center">
         <!-- //// LEFT COLUMN //////////////////////////////////// -->
-        <div class="col-5 bg-dark rounded">
-          <h1 class="text-primary md-3">
-            Welcome {{ user.first_name }} {{ user.last_name }}
-          </h1>
-          
+        <div class="bg-dark rounded p-3 md-3">
+          <h1 class="text-primary">
+            Welcome {{ user.first_name }}
+          </h1>  
         </div>
-        <div class="col-1">
-          <!-- GUTTER -->
-        </div>
+        
         <!-- //// RIGHT COLUMN /////////////////////////////////// -->
-        <div class="col-5 bg-dark rounded p-2">
-          
+        <div >
+          <a href="" class="btn btn-success">CREATE</a>
         </div>
+      </div>
+      <div class="col bg-dark rounded p-3">
+        <h2>
+          These are the Recipes
+        </h2>
+        <table class="table"> 
+          <thead class="thead thead-dark">
+            <tr>
+              <th>Name</th>
+              <th>Under 30 Minutes</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          {% for recipe in all_recipes %}           <!-- when iterating list of dictionaries, get a dict as each recipe, not an index! -->
+          <tr>
+            <td>{{ recipe.name }}</td>
+            {% if recipe.under_30_minutes == 1  %}
+              <td><button class="btn btn-success">Yes</button></td>
+            {% else %}
+              <td><button class="btn btn-danger">No</button></td>
+            {% endif %}
+            <td>
+              <a class="btn btn-primary" href="/recipes/{{recipe.id}}/viewinstructions">View Instructions</a>
+              {% if recipe.user_id == user.id %}
+                <a class="btn btn-success" href="/users/{{recipe.id}}/edit">Edit</a>
+                <a class="btn btn-danger" href="/users/{{recipe.id}}/delete">Delete</a>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+        </table>
       </div>
     </div>
   </main>

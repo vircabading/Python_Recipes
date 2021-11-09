@@ -13,3 +13,7 @@ body {
 .right-nav-bar>* {
     margin: 0px 1%;
 }
+
+main>.container>* {
+    margin-bottom: 3%;
+}

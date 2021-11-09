@@ -3,43 +3,24 @@ from flask_app.config.mysqlconnection import connectToMySQL
 from flask import flash
 import re
 
-TARGETDATABASE = 'dojo_survey_db'                                               # Designates the database we are using
-TABLENAME = "users"                                                             # Designates the table we are using
-EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')      # Pattern for email validatiom
+TARGETDATABASE = 'recipes_db'                                               # Designates the database we are using
+TABLENAME = "recipes"                                                             # Designates the table we are using
 
-# //// USERS CLASS ////////////////////////////////////////////////////////
-class Users:
+# //// RECIPES CLASS ////////////////////////////////////////////////////////
+class Recipes:
     def __init__( self , data ):                                        # Constructor function
         self.id = data['id']
         self.name = data['name']
-        self.email = data['email']
-        self.location = data['location']
-        self.fav_language = data['fav_language']
-        self.comment = data['comment']
+        self.descriptiom = data['description']
+        self.instructions = data['instructions']
+        self.date_made_on = data['date_made_on']
+        self.under_30_minutes = data['under_30_minutes']
+        self.user_id = data['user_id']
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
 
     # //// FLASH ///////////////////////////////////////////////////////////
 
-    @staticmethod
-    def validate_user_create_data(data:dict):
-        is_valid = True
-        # //// Validate User Name ///////
-        if len(data['name']) < 3:
-            flash("Name must be at least 3 characters in length","error_user_name")
-            is_valid = False
-        # //// Validate User Email ////////
-        if not EMAIL_REGEX.match(data['email']):
-            flash("Invalid email address", "error_user_email")
-            is_valid = False
-        # //// Validate User Comments
-        if len( data['comment'] ) < 3:
-            flash("Comment must ve at least 3 characters in length","error_user_comment")
-            is_valid = False
-        elif len( data['comment'] ) > 255:
-            flash("Comment must be < 255 characters in length", "error_user_comment")
-            is_valid = False
-        return is_valid
 
     # //// CREATE //////////////////////////////////////////////////////////
 
