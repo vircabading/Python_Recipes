@@ -13,10 +13,25 @@ from flask_app.models import login_model, recipes_model
 # //// FORM POST /////////////////////////////////
 
 
+# //// UTILITIES /////////////////////////////////
+
+def make_sure_user_is_logged_in():
+    if not 'lu_id' in session:                                              # Check if user is logged in
+        print("User is not logged in, redirect to root login")
+        return redirect("/")                                                # If not logged in, redirect to root login
 
 # //// CREATE ////////////////////////////////////
 
+# **** Function that displays a form for creating a new recipe
+@app.route("/recipes/new")
+def recipes_new():
+    make_sure_user_is_logged_in()                                           # make sure the use is logged in
+    data = {
+        'id': session['lu_id']
+    }
+    user = login_model.LoginUsers.get_one(data)                             # Retrive user's info from db and make a user instance
 
+    return render_template("recipes_new.html", user=user)
 
 # @app.route('/post', methods=['POST'])                         # Retrieve the input values from create form
 # def post():
@@ -47,19 +62,13 @@ from flask_app.models import login_model, recipes_model
 
 @app.route('/dashboard')                                                    # DASHBOARD
 def Dashboard():
-    print("******** in dashboard *******************")
-    if not 'lu_id' in session:                                              # Check if user is logged in
-        print("User is not logged in, redirect to root login")
-        return redirect("/")                                                # If not logged in, redirect to root login
+    print("**** In Dashboard ********")
+    make_sure_user_is_logged_in()                                           # Make sure that the user is logged in
     data = {
         'id': session['lu_id']
     }
-    print("data:")
-    print(data)
     user = login_model.LoginUsers.get_one(data)                             # Retrive user's info from db and make a user instance
-    print("User:")
-    print(user)
-    all_recipes = recipes_model.Recipes.get_all()
+    all_recipes = recipes_model.Recipes.get_all()                           # Retrieve all recipos in the database
     return render_template("dashboard.html", user=user, all_recipes = all_recipes )                     # Pass user's info to the Dashboard
 
 # @app.route('/users/')
@@ -69,14 +78,22 @@ def Dashboard():
 #     all_users = users_class.Users.get_all()                             # Get all instances of users from the database
 #     return render_template("read_all.html", all_users = all_users)
 
-# @app.route('/users/<int:id>')                                           # Retrive the data from one specified user
-# def users_id (id):
-#     print ("*********** In users id ******************")
-#     data = {
-#         'id': id
-#     }
-#     user = users_class.Users.get_one(data)
-#     return render_template("users_read_one.html", user=user)
+@app.route('/recipes/<int:id>/viewinstructions')                                           # Retrive the data from one specified user
+def recipes_id_viewinstructions (id):
+    print ("*********** In recipes id view instructions ******************")
+    if not 'lu_id' in session:                                              # Check if user is logged in
+        print("User is not logged in, redirect to root login")
+        return redirect("/")                                                # If not logged in, redirect to root login
+    data = {
+        'id': session['lu_id']
+    }
+    user = login_model.LoginUsers.get_one(data)                             # Retrive user's info from db and make a user instance
+    
+    data = {
+        'id': id
+    }
+    recipe = recipes_model.Recipes.get_one(data)                            # Retrieve the recipe
+    return render_template("recipes_view_instructions.html", user=user, recipe = recipe)
 
 # //// UPDATE ////////////////////////////////////
 

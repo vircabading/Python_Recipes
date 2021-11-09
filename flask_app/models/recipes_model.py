@@ -1,6 +1,7 @@
 # import the function that will return an instance of a connection ////////
 from flask_app.config.mysqlconnection import connectToMySQL
 from flask import flash
+from flask_app.models import login_model
 import re
 
 TARGETDATABASE = 'recipes_db'                                               # Designates the database we are using
@@ -11,11 +12,13 @@ class Recipes:
     def __init__( self , data ):                                        # Constructor function
         self.id = data['id']
         self.name = data['name']
-        self.descriptiom = data['description']
+        self.description = data['description']
         self.instructions = data['instructions']
         self.date_made_on = data['date_made_on']
         self.under_30_minutes = data['under_30_minutes']
         self.user_id = data['user_id']
+        data['id'] = data['user_id']
+        self.user = login_model.LoginUsers.get_one(data)
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
 

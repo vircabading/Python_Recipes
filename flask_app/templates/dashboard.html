@@ -18,7 +18,7 @@
         </a>
         <div class="right-nav-bar">
             <a href="/logout" class="btn btn-danger">LogOut</a>
-            <a class="btn btn-secondary" href="/">HOME</a>
+            <a class="btn btn-secondary" href="/dashboard">DASHBOARD</a>
         </div>
       </div>
     </div>
@@ -37,7 +37,7 @@
         
         <!-- //// RIGHT COLUMN /////////////////////////////////// -->
         <div >
-          <a href="" class="btn btn-success">CREATE</a>
+          <a href="/recipes/new" class="btn btn-success">CREATE</a>
         </div>
       </div>
       <div class="col bg-dark rounded p-3">
@@ -48,18 +48,25 @@
           <thead class="thead thead-dark">
             <tr>
               <th>Name</th>
+              <th>Description</th>
               <th>Under 30 Minutes</th>
+              <th>Author</th>
               <th>Actions</th>
             </tr>
           </thead>
           {% for recipe in all_recipes %}           <!-- when iterating list of dictionaries, get a dict as each recipe, not an index! -->
           <tr>
             <td>{{ recipe.name }}</td>
-            {% if recipe.under_30_minutes == 1  %}
+            <td>{{ recipe.description }}</td>
+            
+            {% if recipe.under_30_minutes == 1  %}                      <!-- If else for is under 30 minutes -->
               <td><button class="btn btn-success">Yes</button></td>
             {% else %}
               <td><button class="btn btn-danger">No</button></td>
             {% endif %}
+
+            <td>{{ recipe.user.first_name }} {{ recipe.user.last_name }}</td>
+
             <td>
               <a class="btn btn-primary" href="/recipes/{{recipe.id}}/viewinstructions">View Instructions</a>
               {% if recipe.user_id == user.id %}
