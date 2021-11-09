@@ -1,0 +1,15 @@
+body {
+    background-color: black;
+}
+
+* {
+    color: white;
+}
+
+.right-nav-bar {
+    display: flex;
+}
+
+.right-nav-bar>* {
+    margin: 0px 1%;
+}

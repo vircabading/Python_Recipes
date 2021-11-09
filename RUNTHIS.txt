@@ -1,0 +1,3 @@
+Run this in terminal before opening server
+
+pipenv install flask pymysql flash flask-bcrypt
