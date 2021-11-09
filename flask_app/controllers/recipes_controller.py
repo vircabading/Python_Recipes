@@ -77,6 +77,23 @@ def recipes_new():
     user = login_model.LoginUsers.get_one(data)                             # Retrive user's info from db and make a user instance
     return render_template("recipes_new.html", user=user)
 
+# **** Function the creates a pre-populated FORM for Editing a Recipe
+@app.rout("/recipes/<int:id>/edit")
+def recipes_id_edit(id):
+    print("**** In recipes ID Edit Form, creation ")
+    make_sure_user_is_logged_in();
+    data = {
+        'id': session['lu_id']
+    }
+    user = login_model.LoginUsers.get_one(data)                             # Retrive user's info from db and make a user instance
+
+    data = {
+        'id': id
+    }
+    recipe = recipes_model.Recipes.get_one(data)                            # Retrieve recipe info from the db and make a recipe instance
+
+    return render_template("recipes_id_edit.html", user=user, recipe= recipe)
+
 # //// UPDATE ////////////////////////////////////
 
 # @app.route('/users/<int:id>/update/post', methods=['POST'])               # Update a specified user's information
