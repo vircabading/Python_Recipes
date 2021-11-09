@@ -1,5 +1,5 @@
 # ////////////////////////////////////////////////////////
-# RECIPESCONTROLLER
+# RECIPES CONTROLLER
 # ////////////////////////////////////////////////////////
 
 from flask_app import app
@@ -79,10 +79,10 @@ def recipes_new():
 
 # //// UPDATE ////////////////////////////////////
 
-# @app.route('/users/<int:id>/update/post', methods=['POST'])             # Update a specified user's information
+# @app.route('/users/<int:id>/update/post', methods=['POST'])               # Update a specified user's information
 # def users_id_update_post(id):
 #     print ("*********** In Users ID Edit POST *****************")
-#     data = {                                                            # retrieve the data from the form
+#     data = {                                                              # retrieve the data from the form
 #         'id': id,
 #         'first_name': request.form['first_name'],
 #         'last_name': request.form['last_name'],
@@ -93,12 +93,12 @@ def recipes_new():
 
 # //// DELETE ////////////////////////////////////
 
-# @app.route('/<int:id>/delete')                                    # Delete a specified user
-# def users_id_delete(id):
-#     print("******** IN DELETE ********************")
-#     data = {
-#         'id': id
-#     }
-#     users_model.Users.delete(data)
-#     return redirect('/users')
+@app.route("/recipes/<int:id>/delete")
+def recipes_id_delete(id):                                                    # Given the recipe ID, delete the specified ID
+    print("**** In Delete recipe ID ************")
+    data = {
+        'id': id
+    }
+    recipes_model.Recipes.delete(data)                                      # Delete the specified recipe from the database
+    return redirect("/dashboard")
 
