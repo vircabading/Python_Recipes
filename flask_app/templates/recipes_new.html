@@ -30,24 +30,64 @@
     <!-- //// MAIN AREA //////// -->
     <main role="main">
         <div class="container mt-4">
-            <div class="d-flex justify-content-between align-items-center">
 
+            <h1 class="text-primary">
+                Add New Recipe {{ user.first_name }}
+            </h1>
+            <form class="row" action='/recipes/new/post' method='post'>
                 <!-- //// LEFT COLUMN //////////////////////////////////// -->
                 <div class="col-7 bg-dark rounded p-3 md-3">
-                    <h1 class="text-primary">
-                        Add New Recipe {{ user.first_name }}
-                    </h1>
+                    <div class="form-group mb-2">
+                        <label class="form-label" for="name">Recipe Name:</label>
+                        <input class="form-control" type="text" id="name" name="name">
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label class="form-label" for="description">Description:</label>
+                        <input class="form-control" type="text" id="description" name="description">
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="instructions">Instructions:</label>
+                        <textarea class="form-control" name="instructions" id="instructions" rows="3"></textarea>
+                    </div>
+
+
+
+                    <input class="btn btn-success" type="submit" value="Create"> <!-- Submit form button-->
                 </div>
                 <div class="col-1">
                     <!--GUTTER-->
                 </div>
                 <!-- //// RIGHT COLUMN /////////////////////////////////// -->
                 <div class="col-4 bg-dark rounded p-3">
-                    <p>
-                        right column
-                    </p>
+                    <div class="form-group mb-2">
+                        <label for="date_made_on">Date Made On:</label>
+                        <input class="text-dark" type="date" id="date_made_on" name="date_made_on">
+                    </div>
+                    <div class="d-flex align-items-center mb-2">
+                        <p class="m-3">
+                            Cooking Time:
+                        </p>
+                        <div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="under_30_minutes" value="0">
+                                <label class="form-check-label" for="under_30_minutes">
+                                    Over 30 Minutes
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="under_30_minutes" value="1">
+                                <label class="form-check-label" for="under_30_minutes">
+                                    Under 30 Minutes
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
-            </div>
+
+            </form>
         </div>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"

@@ -31,7 +31,11 @@ class Recipes:
     # @returns ID of created user
     @classmethod
     def create(cls, data ):
-        query = "INSERT INTO " + TABLENAME +" ( name, email, location , fav_language , comment) VALUES ( %(name)s ,%(email)s, %(location)s , %(fav_language)s, %(comment)s );"
+        print("**** In Create One recipe")
+        query = "INSERT INTO " + TABLENAME +" ( name, description, instructions , date_made_on , under_30_minutes, user_id) VALUES ( %(name)s ,%(description)s, %(instructions)s , %(date_made_on)s, %(under_30_minutes)s, %(user_id)s );"
+        print("data and query")
+        print(data)
+        print(query)
         # data is a dictionary that will be passed into the save method from server.py
         return connectToMySQL(TARGETDATABASE).query_db( query, data )
         

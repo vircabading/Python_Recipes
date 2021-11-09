@@ -22,41 +22,20 @@ def make_sure_user_is_logged_in():
 
 # //// CREATE ////////////////////////////////////
 
-# **** Function that displays a form for creating a new recipe
-@app.route("/recipes/new")
-def recipes_new():
-    make_sure_user_is_logged_in()                                           # make sure the use is logged in
+@app.route('/recipes/new/post', methods=['POST'])
+def recipes_new_post():
+    print("**** In recipes new POST ********")
+    make_sure_user_is_logged_in()
     data = {
-        'id': session['lu_id']
+        **request.form,
+        'user_id': session['lu_id']
     }
-    user = login_model.LoginUsers.get_one(data)                             # Retrive user's info from db and make a user instance
+    data['under_30_minutes'] = int(data['under_30_minutes'])
+    print("data:")
+    print(data)
+    recipes_model.Recipes.create(data)
+    return redirect("/dashboard")
 
-    return render_template("recipes_new.html", user=user)
-
-# @app.route('/post', methods=['POST'])                         # Retrieve the input values from create form
-# def post():
-#     print("**** In / Post Retrieval **************")
-#     data = {                                                            # Create Data Dictionary from values in form
-#         'name': request.form['name'],
-#         'email': request.form['email'],
-#         'location': request.form['location'],
-#         'fav_language': request.form['fav_language'],
-#         'comment' : request.form['comment']
-#     }
-#     print(data)
-
-#     if not users_model.Users.validate_user_create_data(data):
-#         return redirect("/")
-
-#     id = users_model.Users.create(data)                                 # Insert User in to database
-#     data['id'] = id                                                     # Memorize ID of created User
-
-#     user = users_model.Users.get_one(data)                              # get an instance of the created user
-#     ("Newly created user instance: ", user)
-
-#     print("**** Retrieving All Users *******************")
-#     all_users = users_model.Users.get_all()                             # Get all instances of users from the database
-#     return render_template("user_show.html", user = user, all_users = all_users)
 
 # //// RETRIEVE ////////////////////////////////////
 
@@ -70,13 +49,6 @@ def Dashboard():
     user = login_model.LoginUsers.get_one(data)                             # Retrive user's info from db and make a user instance
     all_recipes = recipes_model.Recipes.get_all()                           # Retrieve all recipos in the database
     return render_template("dashboard.html", user=user, all_recipes = all_recipes )                     # Pass user's info to the Dashboard
-
-# @app.route('/users/')
-# @app.route('/users')                                                    # Read All Users Page
-# def users():
-#     print("**** Retrieving Users *******************")
-#     all_users = users_class.Users.get_all()                             # Get all instances of users from the database
-#     return render_template("read_all.html", all_users = all_users)
 
 @app.route('/recipes/<int:id>/viewinstructions')                                           # Retrive the data from one specified user
 def recipes_id_viewinstructions (id):
@@ -94,6 +66,16 @@ def recipes_id_viewinstructions (id):
     }
     recipe = recipes_model.Recipes.get_one(data)                            # Retrieve the recipe
     return render_template("recipes_view_instructions.html", user=user, recipe = recipe)
+
+# **** Function that displays a form for creating a new recipe
+@app.route("/recipes/new")
+def recipes_new():
+    make_sure_user_is_logged_in()                                           # make sure the use is logged in
+    data = {
+        'id': session['lu_id']
+    }
+    user = login_model.LoginUsers.get_one(data)                             # Retrive user's info from db and make a user instance
+    return render_template("recipes_new.html", user=user)
 
 # //// UPDATE ////////////////////////////////////
 

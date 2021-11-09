@@ -70,8 +70,8 @@
             <td>
               <a class="btn btn-primary" href="/recipes/{{recipe.id}}/viewinstructions">View Instructions</a>
               {% if recipe.user_id == user.id %}
-                <a class="btn btn-success" href="/users/{{recipe.id}}/edit">Edit</a>
-                <a class="btn btn-danger" href="/users/{{recipe.id}}/delete">Delete</a>
+                <a class="btn btn-success" href="/recipes/{{recipe.id}}/edit">Edit</a>
+                <a class="btn btn-danger" href="/recipes/{{recipe.id}}/delete">Delete</a>
               {% endif %}
             </td>
           </tr>
