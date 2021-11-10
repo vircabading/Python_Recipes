@@ -10,20 +10,37 @@ TABLENAME = "recipes"                                                           
 # //// RECIPES CLASS ////////////////////////////////////////////////////////
 class Recipes:
     def __init__( self , data ):                                        # Constructor function
-        self.id = data['id']
+        self.id = data['id']                                            # Recipe ID
         self.name = data['name']
         self.description = data['description']
         self.instructions = data['instructions']
         self.date_made_on = data['date_made_on']
         self.under_30_minutes = data['under_30_minutes']
         self.user_id = data['user_id']
-        data['id'] = data['user_id']
-        self.user = login_model.LoginUsers.get_one(data)
+        data['id'] = data['user_id']                                    # User ID
+        self.user = login_model.LoginUsers.get_one(data)                # Get an instamnce of the user that created the recipe
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
 
     # //// FLASH ///////////////////////////////////////////////////////////
 
+    @staticmethod
+    def is_valid_recipe_data(data:dict):
+        print("////////////// IS IN IS VALID RECIPE DATA ////////////////////////////////")
+        is_valid = True
+        if len(data['name']) < 3:
+            flash("Recipe name nust be at least 3 characters long")
+            is_valid = False
+        if len(data['description']) < 3:
+            flash("Description must be at least 3 characters long")
+            is_valid = False
+        if len(data['instructions']) <3:
+            flash("Instructions must be at least 3 characters long")
+            is_valid = False
+        if len(data['date_made_on']) < 1:
+            flash("Must Submit Date Made On")
+            is_valid = False
+        return is_valid
 
     # //// CREATE //////////////////////////////////////////////////////////
 
@@ -67,7 +84,7 @@ class Recipes:
     # @Returns: Nothing
     @classmethod
     def update_one(cls, data:dict):
-        query = "UPDATE " + TABLENAME +" SET first_name=%(first_name)s, last_name=%(last_name)s, email=%(email)s WHERE id=%(id)s"
+        query = "UPDATE " + TABLENAME +" SET name=%(name)s, description=%(description)s, instructions=%(instructions)s, date_made_on=%(date_made_on)s, under_30_minutes=%(under_30_minutes)s, user_id=%(user_id)s WHERE id=%(id)s"
         return connectToMySQL(TARGETDATABASE).query_db(query, data)
 
     # //// DELETE //////////////////////////////////////////////////////////

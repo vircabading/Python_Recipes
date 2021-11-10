@@ -4,7 +4,8 @@ from flask import flash
 import re                                                               # Import REGEX
 from flask_app import app                                               # import app for use in bcrypt
 from flask_bcrypt import Bcrypt                                         # we are creating an object called bcrypt, 
-bcrypt = Bcrypt(app)                                                    #   which is made by invoking the function Bcrypt with our app as an argument 
+bcrypt = Bcrypt(app)                                                    #   which is made by invoking the function Bcrypt with our app as an argument
+from flask_app.models import recipes_model                              # Import the recipes model file to use Recipes class
 
 TARGETDATABASE = 'recipes_db'                                       # Designates the database we are using
 TABLENAME = "users"                                                     # Designates the table we are using
@@ -127,6 +128,27 @@ class LoginUsers:
         results = connectToMySQL(TARGETDATABASE).query_db(query, data)  # Call the connectToMySQL function with the target db
                                                                         # result is a list of a single dictionary
         return cls(results[0])                                          # return an instance of the dictionary
+
+    # **** JOIN ACION ******************************************************
+    # **** Get All Users with its Recipes ********************************
+    # @returns: an instance of the User
+    @classmethod
+    def get_user_with_recipes(cls, data:dict):
+        query = "SELECT * FROM users LEFT JOIN recipes ON users.id = recipes.user_id WHERE users.id = %(id)s;"
+        results = connectToMySQL(TARGETDATABASE).query_db(query, data)  # Call the connectToMySQL function with the target db
+                                                                        # results is a list of dictionaries
+        user = cls(results[0])                                          # get an instance of this user
+        for row_from_db in results:
+            recipes_data = {
+                **row_from_db,
+                "id": row_from_db["recipes.id"],
+                "created_at": row_from_db["recipes.created_at"],
+                "updated_at": row_from_db["recipes.updated_at"]
+            }
+            user.recipes.append( recipes_model.Recipes(recipes_data) )  # Get an instance of each recipe owned by user and append it
+                                                                        #   to the list of recipes in the user instance
+        return user
+
 
     # **** JOIN ACION ******************************************************
     # **** Get All Users with its Recipes ********************************

@@ -60,7 +60,7 @@
                 </div>
                 <div class="d-flex align-items-center">
                     <strong>Created On</strong>
-                    <p class="m-3">{{ recipe.date_made_on }}</p>
+                    <p class="m-3">{{ recipe.date_made_on.strftime("%B %d, %Y") }}</p>
                 </div>
                 <div class="d-flex align-items-center">
                     <strong>Created By</strong>

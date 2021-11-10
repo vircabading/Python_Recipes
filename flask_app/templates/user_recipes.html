@@ -36,14 +36,13 @@
         </div>
         
         <!-- //// RIGHT COLUMN /////////////////////////////////// -->
-        <div class="d-flex">
-          <a href="/user/recipes" class="btn btn-secondary m-2">Your Recipes</a>
-          <a href="/recipes/new" class="btn btn-success m-2">CREATE</a>
+        <div >
+          <a href="/recipes/new" class="btn btn-success">CREATE</a>
         </div>
       </div>
       <div class="col bg-dark rounded p-3">
         <h2>
-          These are the Recipes
+          These are all of your recipes
         </h2>
         <table class="table"> 
           <thead class="thead thead-dark">
@@ -51,11 +50,10 @@
               <th>Name</th>
               <th>Description</th>
               <th>Under 30 Minutes</th>
-              <th>Author</th>
               <th>Actions</th>
             </tr>
           </thead>
-          {% for recipe in all_recipes %}           <!-- when iterating list of dictionaries, get a dict as each recipe, not an index! -->
+          {% for recipe in user.recipes %}           <!-- when iterating list of dictionaries, get a dict as each recipe, not an index! -->
           <tr>
             <td>{{ recipe.name }}</td>
             <td>{{ recipe.description }}</td>
@@ -65,8 +63,6 @@
             {% else %}
               <td><button class="btn btn-danger">No</button></td>
             {% endif %}
-
-            <td>{{ recipe.user.first_name }} {{ recipe.user.last_name }}</td>
 
             <td>
               <a class="btn btn-primary" href="/recipes/{{recipe.id}}/viewinstructions">View Instructions</a>
